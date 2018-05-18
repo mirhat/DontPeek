@@ -1,13 +1,21 @@
 
-var APIUrl = "https://westcentralus.api.cognitive.microsoft.com";
+var APIUrl = "https://westeurope.api.cognitive.microsoft.com";
 
 //Please use your own API keys
-var subscriptionKeyFaceAPI = "123620e50edd4e2ab689f9e6ab142acb";
-var subscriptionKeyVisionAPI = "32f061f7cad04374b172212560115537";
+var subscriptionKeyFaceAPI = "ed8d512d5df94c83b206222ff3dacede";
+var subscriptionKeyVisionAPI = "ed8d512d5df94c83b206222ff3dacede";
 
 var firstFace;
 
 window.onload = init;
+
+var emotion = {
+    anger: false,
+    happiness: false,
+    fear: false,
+    sadness: false,
+    surprise: false
+}
 
 function init() {
     showCamera();
@@ -31,8 +39,8 @@ function toggleView(view) {
 //activates the Webcam
 function showCamera() {
     Webcam.set({
-        width: 320,
-        height: 240,
+        width: 520,
+        height: 440,
         image_format: 'jpeg',
         jpeg_quality: 100
     });
@@ -60,7 +68,9 @@ function submitToFaceAPI() {
 
     hideMarkers();
     $("#status").text("Submitting to cloud...");
-    var file = document.getElementById("base64image").src.substring(23).replace(' ', '+');
+
+
+    var file = document.getElementById("img").src.substring(23).replace(' ', '+');
     var img = Base64Binary.decodeArrayBuffer(file);
 
     var xhr = new XMLHttpRequest();
@@ -85,6 +95,14 @@ function uploadFaceAPIComplete(event) {
                 $("#output").html(JSON.stringify("You all look beautiful!"));
             }
 
+            var numberOfFaces = event.target.response.length;
+            if (numberOfFaces > 1) {
+                $("#StopSign").css("display", "block");
+            } else {
+                $("#StopSign").css("display", "none");
+            }
+
+            console.log("Number of faces " + numberOfFaces);
         }
         else {
             $("#status").text("No face found. Please try again!");
@@ -102,41 +120,18 @@ function formatOutput(face) {
     if (face.faceAttributes.gender === 'male') output = "Hello Mister! ";
     else output = "Hello Miss! ";
 
-    if (face.faceAttributes.emotion.anger > 0.8) output += "You look angry today. ";
-    if (face.faceAttributes.emotion.fear > 0.8) output += "You look frightened. What happend? ";
-    if (face.faceAttributes.emotion.happiness > 0.8) output += "You look very happy. I am happy too. ";
-    if (face.faceAttributes.emotion.sadness > 0.8) output += "You look sad. What is wrong? ";
-    if (face.faceAttributes.emotion.surprise > 0.8) output += "You look surprised. Are you impressed by me? ";
+    emotion.anger = face.faceAttributes.emotion.anger > 0.8;
+    emotion.fear = face.faceAttributes.emotion.fear > 0.8;
+    emotion.happiness = face.faceAttributes.emotion.happiness > 0.8;
+    emotion.sadness = face.faceAttributes.emotion.sadness > 0.8;
+    emotion.surprise = face.faceAttributes.emotion.surprise > 0.8;
 
-    if (face.faceAttributes.facialHair.beard > 0.8) output += "Nice beard. ";
-    else if (face.faceAttributes.facialHair.beard > 0.4) output += "Are you growing a beard? ";
-
-    if (face.faceAttributes.glasses === 'NoGlasses') output += "I think glasses would fit you. ";
-    else output += "Where did you get your glasses from? ";
-
-    if (face.faceAttributes.hair.invisible === 'false') output += "Unfortunately i can't see your hair. ";
-    else {
-        if (face.faceAttributes.hair.bald > 0.8) output += "Baldness suits you. ";
-        else if (face.faceAttributes.hair.bald > 0.4) output += "Are you bald? ";
-        else {
-            var colors = face.faceAttributes.hair.hairColor;
-            colors.sort(function (a, b) {
-                if (b.confidence > a.confidence) return 1;
-                if (b.confidence < a.confidence) return -1;
-                return 0;
-            });
-            if (colors[0].color !== 'other') output += "Your " + colors[0].color + " hair looks fantastic! ";
-        }
-    }
-
-    if (face.faceAttributes.makeup.eyeMakeup === 'true') output += "Great eye makeup. ";
-    if (face.faceAttributes.makeup.lipMakeup === 'true') output += "Great lip makeup. ";
-
-    $("#output").html(JSON.stringify(output));
+    $("#output").html(JSON.stringify(emotion));
 }
 
 //hides icons
 function hideMarkers() {
+    
     $("#FaceMarker").css("display", "none");
     $("#Hat").css("display", "none");
     $("#Nose").css("display", "none");
@@ -153,6 +148,8 @@ function christmas() {
     var faceHeight = faceRectange.height;
     var faceLeft = faceRectange.left;
     var faceTop = faceRectange.top;
+
+
 
     $("#Hat").css("top", faceTop - faceWidth);
     $("#Hat").css("left", faceLeft);
@@ -174,7 +171,7 @@ function christmas() {
 
 function startRecognition() {
     takePicture();
-    window.refreshIntervalId = setInterval(takePicture, 2000);
+    window.refreshIntervalId = setInterval(takePicture, 500);
 }
 
 function stopRecognition() {
@@ -186,86 +183,12 @@ function takePicture() {
     Webcam.snap(function (data_uri) {
         $("#imgField").html('<img id="img" style="display:none" src="' + data_uri + '"/>');
     });
-    submitToVisionAPI()
+    
+    //submitToVisionAPI()
+    submitToFaceAPI()
 }
 
-//api call
-function submitToVisionAPI() {
-    var params = {
-        "visualFeatures": "Categories,Description,Color",
-        "details": "",
-        "language": "en",
-    };
 
-    var file = document.getElementById("img").src.substring(23).replace(' ', '+');
-    var img = Base64Binary.decodeArrayBuffer(file);
-
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", APIUrl + '/vision/v1.0/analyze?' + $.param(params), "image/jpg");
-    xhr.responseType = "json";
-    xhr.setRequestHeader("Content-Type", "application/octet-stream");
-    xhr.setRequestHeader("Ocp-Apim-Subscription-Key", subscriptionKeyVisionAPI);
-    xhr.onload = uploadVisionAPIComplete;
-    xhr.send(img);
-}
-
-//receives api response
-function uploadVisionAPIComplete(event) {
-    var tags = "";
-    var description = "";
-    var people = false;
-    var i = 0;
-
-    if (this.status == 200) {
-
-        var response = event.target.response;
-
-        if (response.description.captions.length > 0) {
-            description += capitalizeFirstLetter(response.description.captions[0].text) + ". ";
-        }
-
-
-        while (people === false && i < response.categories.length) {
-            try {
-                if (response.categories[i].name.match(/people/g).length === 1) {
-                    people = true;
-                    try {
-                        if (response.categories[i].detail.celebrities.length > 0) {
-                            description += "I can see following celebrities: ";
-                            for (y in response.categories[i].detail.celebrities) {
-                                description += response.categories[i].detail.celebrities[y].name + ", ";
-                            }
-                            description += ".";
-                        } else {
-                            description += "There are no celebrities.";
-                        }
-                    } catch (error) {
-                        description += "There are no celebrities.";
-                    }
-                }
-            }
-            catch (error) {
-
-            }
-            i++;
-        }
-
-
-        if (people === false) {
-            description += "There are no persons.";
-        }
-
-        for (var i = 0; i < 6; i++) {
-            tags += "#" + response.description.tags[i] + " ";
-        }
-
-        console.log("response", response);
-        
-        $("#tags").html(tags);
-        $("#description").html(description);
-
-    }
-}
 
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
