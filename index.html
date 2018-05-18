@@ -29,6 +29,11 @@
             top: 20px;
             left: calc(100% - 200px);
         }
+
+        .emotion {
+            display: none;
+            
+        }
     </style>
 </head>
 
@@ -37,11 +42,15 @@
 <div class="container">  
         <div id="itemRecognition">
             <h3>Computer Vision API Demo for "DXC Coders Garage" Hackathon</h3>
-            <h5>This App is able to add a description to the life feed of the webcam. Celebrities are recognized and
-                hashtags are added.</h5>
-            <h5>NOTE: The api is called every 2 seconds in this demo. The call rate could be increased, but the free api keys
-            allow only a limited amount of calls.</h5>
+            <h5>This App is able to recognize emotion of user and block another people to look at your screen</h5>
             <br><br>
+            <div>
+                    <img id="fear" class="emotion" src="images/fear.png"/>
+                    <img id="anger" class="emotion" src="images/anger.png"/>
+                    <img id="happiness" class="emotion" src="images/happiness.png"/>
+                    <img id="sadness" class="emotion" src="images/sadness.png"/>
+                    <img id="surprise" class="emotion" src="images/surprise.png"/>
+            </div>
             <div id="videoContainer" class="containerDiv">
                 <div id="description"></div>
                 
@@ -50,6 +59,10 @@
                         <div id="camera"></div>
                     <img id="Hat" src="images/hat.png"/>
                     <img id="StopSign" class="stop-sign" src="images/stop-sign.png"/>
+
+                    
+
+
                     <img id="Nose" src="images/red_nose.png"/>
                     <div id="results"></div>
                     <div id="FaceMarker"></div>

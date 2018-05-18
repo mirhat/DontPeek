@@ -126,7 +126,35 @@ function formatOutput(face) {
     emotion.sadness = face.faceAttributes.emotion.sadness > 0.8;
     emotion.surprise = face.faceAttributes.emotion.surprise > 0.8;
 
-    $("#output").html(JSON.stringify(emotion));
+    if (emotion.anger) {
+        $("#anger").css("display", "block");
+    } else {
+        $("#anger").css("display", "none");
+    }
+
+    if (emotion.fear) {
+        $("#fear").css("display", "block");
+    } else {
+        $("#fear").css("display", "none");
+    }
+
+    if (emotion.happiness) {
+        $("#happiness").css("display", "block");
+    } else {
+        $("#happiness").css("display", "none");
+    }
+
+    if (emotion.sadness) {
+        $("#sadness").css("display", "block");
+    } else {
+        $("#sadness").css("display", "none");
+    }
+
+    if (emotion.surprise) {
+        $("#surprise").css("display", "block");
+    } else {
+        $("#surprise").css("display", "none");
+    }
 }
 
 //hides icons
