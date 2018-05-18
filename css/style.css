@@ -1,0 +1,71 @@
+.containerDiv {
+    display: inline-block;
+    width: 320px;
+}
+
+#FaceMarker {
+    z-index: 10;
+    position: absolute;
+    display: none;
+    border: 2px;
+    border-color: red;
+    border-style: solid;
+}
+
+#Hat {
+    z-index: 10;
+    position: absolute;
+    display: none;
+}
+
+#Nose {
+    z-index: 10;
+    position: absolute;
+    display: none;
+}
+
+#merryChristmas {
+    margin-left: 20px;
+    margin-bottom: 20px;
+    font-family: "Times New Roman";
+    font-style: italic;
+    font-size: 60px;
+    color: red;
+    transform: rotate(340deg);
+    position: relative;
+}
+
+.btn {
+    margin-top: 20px;
+}
+
+#status {
+    margin-top: 20px;
+}
+
+#startRecording {
+    position: fixed;
+}
+
+#link {
+    font-size: 20px;
+}
+
+#output {
+    font-size: large;
+}
+
+#buttons {
+    position: relative;
+}
+
+#videoContainer {
+    position: relative;
+    left: 30%;
+}
+
+#buttons {
+    display: inline-block;
+    vertical-align: top;
+    left: 33%;
+}

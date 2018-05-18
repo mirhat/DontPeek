@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>DXC Coders Garage DEMO</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="scripts/webcam.min.js"></script>
+    <script type="text/javascript" src="scripts/base64-binary.js"></script>
+    <script type="text/javascript" src="scripts/script.js"></script>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Static navbar -->
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                        aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="https://github.com/ManuelWe/ManuelWe.github.io">Web Application - DEMO</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="javascript:toggleView('home')">Home</a></li>
+                    <li><a href="javascript:toggleView('faceRecognition')">Face Recognition</a></li>
+                    <li><a href="javascript:toggleView('itemRecognition')">Computer Vision API</a></li>
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div><!--/.container-fluid -->
+    </nav>
+
+
+    <div class="jumbotron">
+        <div id="home">
+            <h2>DXC Coders Garage - Hackathon DEMO</h2>
+            <br>
+            <p>This Web Application is a Demo for the DXC Hackathon at the We are Developers Congress 2018 in Vienna.
+                Feel free to copy and expand the functionality of this Web App.</p>
+            <br><br>
+            <h4>NOTE: This Demo uses api subscription keys which are limited in their number of api calls. If you want
+                to test extensively please download the code and use your own api keys.</h4>
+            <br><br>
+            <p>The code is provided here: </p><a id="link" href="https://github.com/ManuelWe/ManuelWe.github.io"> Github
+            Repository</a>
+        </div>
+
+ <!--###################################### Face Recognition ############################################################-->
+
+        <div id="faceRecognition" style="display:none">
+            <h3>Face API Demo for "DXC Coders Garage" Hackathon</h3>
+            <h5>This App recognizes moods, haircolor, glasses... from webcam snapshots.</h5>
+            <br>
+            <div class="containerDiv">
+                <div id="my_camera"></div>
+                <form><input id="capture" type="button" class="btn btn-success" value="Capture"
+                             onClick="capturePicture();submitToFaceAPI();"></form>
+            </div>
+            <div class="containerDiv" style="position: relative">
+                <div style="position: relative">
+                    <img id="Hat" src="images/hat.png"/>
+                    <img id="Nose" src="images/red_nose.png"/>
+                    <div id="results"></div>
+                    <div id="FaceMarker"></div>
+                </div>
+                <div id="resultsActions" style="display:none;">
+                    <button id="christmas" class="btn btn-danger" onclick="christmas()">It's Christmas!</button>
+                </div>
+            </div>
+            <div class="containerDiv" style="position: relative">
+                <p id="merryChristmas" style="display:none;">Merry Christmas!</p>
+                <div id="output">
+                </div>
+                <div class="footer" id="status">Waiting For Picture...</div>
+            </div>
+        </div>
+
+
+<!--################################### Computer Vision API ###########################################################-->
+
+        <div id="itemRecognition" style="display:none">
+            <h3>Computer Vision API Demo for "DXC Coders Garage" Hackathon</h3>
+            <h5>This App is able to add a description to the life feed of the webcam. Celebrities are recognized and
+                hashtags are added.</h5>
+            <h5>NOTE: The api is called every 2 seconds in this demo. The call rate could be increased, but the free api keys
+            allow only a limited amount of calls.</h5>
+            <br><br>
+            <div id="videoContainer" class="containerDiv">
+                <div id="description"></div>
+                <div id="camera"></div>
+                <div id="tags"></div>
+            </div>
+            <div id="buttons" class="containerDiv">
+                <form><input id="captureBtn" type="button" class="btn btn-success" value="Start Recognition"
+                             onClick="startRecognition()"></form>
+                <button class="btn btn-danger" onclick="stopRecognition()">Stop Recognition</button>
+            </div>
+
+            <div id="imgField" style="display:none"></div>
+        </div>
+    </div>
+
+</div> <!-- /container -->
+</body>
+</html>
