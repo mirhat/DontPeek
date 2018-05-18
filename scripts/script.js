@@ -102,7 +102,7 @@ function uploadFaceAPIComplete(event) {
                 $("#StopSign").css("display", "none");
             }
 
-            console.log("Number of faces " + numberOfFaces);
+            console.log(emotion);
         }
         else {
             $("#status").text("No face found. Please try again!");
@@ -120,11 +120,12 @@ function formatOutput(face) {
     if (face.faceAttributes.gender === 'male') output = "Hello Mister! ";
     else output = "Hello Miss! ";
 
-    emotion.anger = face.faceAttributes.emotion.anger > 0.8;
-    emotion.fear = face.faceAttributes.emotion.fear > 0.8;
+    emotion.anger = face.faceAttributes.emotion.anger > 0.5;
+    emotion.fear = face.faceAttributes.emotion.fear > 0.5;
     emotion.happiness = face.faceAttributes.emotion.happiness > 0.8;
-    emotion.sadness = face.faceAttributes.emotion.sadness > 0.8;
-    emotion.surprise = face.faceAttributes.emotion.surprise > 0.8;
+    emotion.sadness = face.faceAttributes.emotion.sadness > 0.5;
+    emotion.surprise = face.faceAttributes.emotion.surprise > 0.5;
+    emotion.neutral = face.faceAttributes.emotion.neutral > 0.8;
 
     if (emotion.anger) {
         $("#anger").css("display", "block");
@@ -154,6 +155,12 @@ function formatOutput(face) {
         $("#surprise").css("display", "block");
     } else {
         $("#surprise").css("display", "none");
+    }
+
+    if (emotion.neutral) {
+        $("#neutral").css("display", "block");
+    } else {
+        $("#neutral").css("display", "none");
     }
 }
 
